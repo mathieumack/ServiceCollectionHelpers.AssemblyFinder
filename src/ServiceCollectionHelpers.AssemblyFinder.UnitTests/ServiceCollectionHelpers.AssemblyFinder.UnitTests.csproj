@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ServiceCollection.Helpers.AssemblyFinder\ServiceCollectionHelpers.AssemblyFinder.csproj" />
+    <ProjectReference Include="..\ServiceCollectionHelpers.AssemblyFinder\ServiceCollectionHelpers.AssemblyFinder.csproj" />
   </ItemGroup>
 
 </Project>

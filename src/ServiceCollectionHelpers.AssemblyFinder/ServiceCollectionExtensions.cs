@@ -77,7 +77,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                 throw fail;
             }
 
-            RegisterTypes(serviceCollection, result, inheritsType, options);
+            RegisterTypes(serviceCollection, result, interfaceType, options);
 
             return serviceCollection;
         }
