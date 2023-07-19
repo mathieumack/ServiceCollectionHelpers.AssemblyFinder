@@ -3,6 +3,7 @@ using System;
 
 namespace ServiceCollectionHelpers.AssemblyFinder.Attributes
 {
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public class ServiceRegisterAttribute : Attribute
     {
         /// <summary>

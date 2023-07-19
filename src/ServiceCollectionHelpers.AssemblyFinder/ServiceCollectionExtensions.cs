@@ -14,8 +14,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         {
             return serviceCollection.RegisterClassesOfType(typeof(T), new RegisterAsOptions()
             {
-                ServiceLifetime = ServiceLifetime.Scoped,
-                //RegisterOnlyConcreteClass = true
+                ServiceLifetime = ServiceLifetime.Scoped
             });
         }
 
@@ -23,8 +22,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         {
             return serviceCollection.RegisterClassesOfType(typeof(T), options ?? new RegisterAsOptions()
             {
-                ServiceLifetime = ServiceLifetime.Scoped,
-                //RegisterOnlyConcreteClass = true
+                ServiceLifetime = ServiceLifetime.Scoped
             });
         }
 
@@ -48,7 +46,6 @@ namespace ServiceCollectionHelpers.AssemblyFinder
 
         private static IServiceCollection RegisterClassesThatInheritsInterface(this IServiceCollection serviceCollection, Type interfaceType, RegisterAsOptions options = null)
         {
-            var result = new List<Type>();
             try
             {
                 foreach (var a in options.Assemblies)
@@ -59,7 +56,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                         {
                             if (t.IsClass && !t.IsAbstract)
                             {
-                                result.Add(t);
+                                serviceCollection.Register(t, interfaceType, options);
                             }
                         }
                     }
@@ -74,7 +71,6 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                 throw fail;
             }
 
-            serviceCollection.Register(result, interfaceType, options);
 
             return serviceCollection;
         }
