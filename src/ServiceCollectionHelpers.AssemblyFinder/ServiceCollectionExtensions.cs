@@ -1,24 +1,20 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.Services.Common.CommandLine;
-using Microsoft.VisualStudio.Services.TestManagement.TestPlanning.WebApi;
 using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace ServiceCollectionHelpers.AssemblyFinder
 {
     public static class ServiceCollectionExtensions
     {
-        #region Methods
         public static IServiceCollection RegisterTypes<T>(this IServiceCollection serviceCollection)
         {
             return serviceCollection.RegisterClassesOfType(typeof(T), new RegisterAsOptions()
             {
-                RegisterAs = RegisterAs.Scoped,
-                //RegisterOnlyConcreteClass = true
+                ServiceLifetime = ServiceLifetime.Scoped
             });
         }
 
@@ -26,8 +22,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         {
             return serviceCollection.RegisterClassesOfType(typeof(T), options ?? new RegisterAsOptions()
             {
-                RegisterAs = RegisterAs.Scoped,
-                //RegisterOnlyConcreteClass = true
+                ServiceLifetime = ServiceLifetime.Scoped
             });
         }
 
@@ -51,7 +46,6 @@ namespace ServiceCollectionHelpers.AssemblyFinder
 
         private static IServiceCollection RegisterClassesThatInheritsInterface(this IServiceCollection serviceCollection, Type interfaceType, RegisterAsOptions options = null)
         {
-            var result = new List<Type>();
             try
             {
                 foreach (var a in options.Assemblies)
@@ -62,7 +56,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                         {
                             if (t.IsClass && !t.IsAbstract)
                             {
-                                result.Add(t);
+                                serviceCollection.Register(t, interfaceType, options);
                             }
                         }
                     }
@@ -77,12 +71,11 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                 throw fail;
             }
 
-            RegisterTypes(serviceCollection, result, interfaceType, options);
 
             return serviceCollection;
         }
 
-        private static IServiceCollection RegisterClassesThatInheritsFrom(this IServiceCollection serviceCollection, Type inheritsType, RegisterAsOptions options = null)
+        internal static IServiceCollection RegisterClassesThatInheritsFrom(this IServiceCollection serviceCollection, Type inheritsType, RegisterAsOptions options = null)
         {
             var result = new List<Type>();
             try
@@ -111,25 +104,29 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                 throw fail;
             }
 
-            RegisterTypes(serviceCollection, result, inheritsType, options);
+            serviceCollection.Register(result, inheritsType, options);
 
             return serviceCollection;
         }
 
-        private static void RegisterTypes(IServiceCollection serviceCollection, List<Type> types, Type serviceType, RegisterAsOptions options)
+        internal static void Register(this IServiceCollection serviceCollection, List<Type> types, Type serviceType, RegisterAsOptions options)
         {
             foreach (var type in types)
             {
-                if (options.RegisterAs == RegisterAs.Transient)
-                    serviceCollection.AddScoped(serviceType, type);
-                else if (options.RegisterAs == RegisterAs.Scoped)
-                    serviceCollection.AddScoped(serviceType, type);
-                else if (options.RegisterAs == RegisterAs.Singleton)
-                    serviceCollection.AddSingleton(serviceType, type);
-                else
-                    throw new InvalidOperationException("The RegisterAs option is not recongnised as a valid type. Supported :Transient, Scoped, Singleton.");
+                serviceCollection.Register(type, serviceType, options);
             }
+        }
 
+        internal static void Register(this IServiceCollection serviceCollection, Type type, Type serviceType, RegisterAsOptions options)
+        {
+            if (options.ServiceLifetime == ServiceLifetime.Transient)
+                serviceCollection.AddScoped(serviceType, type);
+            else if (options.ServiceLifetime == ServiceLifetime.Scoped)
+                serviceCollection.AddScoped(serviceType, type);
+            else if (options.ServiceLifetime == ServiceLifetime.Singleton)
+                serviceCollection.AddSingleton(serviceType, type);
+            else
+                throw new InvalidOperationException("The RegisterAs option is not recongnised as a valid type. Supported :Transient, Scoped, Singleton.");
         }
 
         /// <summary>
@@ -140,8 +137,6 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         {
             return AppDomain.CurrentDomain.GetAssemblies();
         }
-
-        #endregion
 
         #region Utilities
 

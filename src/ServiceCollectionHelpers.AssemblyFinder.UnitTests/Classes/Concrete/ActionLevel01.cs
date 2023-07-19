@@ -1,12 +1,9 @@
-﻿using ServiceCollectionHelpers.AssemblyFinder.UnitTests.Classes.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using ServiceCollectionHelpers.AssemblyFinder.Attributes;
 
 namespace ServiceCollectionHelpers.AssemblyFinder.UnitTests.Classes.Concrete
 {
+    [ServiceRegister(Scope = ServiceLifetime.Singleton, RegisterWithInterface = true)]
     internal class ActionLevel01 : AbstractAction
     {
         public virtual int Level => 1;

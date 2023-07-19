@@ -1,11 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ServiceCollectionHelpers.AssemblyFinder.UnitTests.Classes.Abstractions;
-using ServiceCollectionHelpers.AssemblyFinder.UnitTests.Classes.Concrete;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ServiceCollectionHelpers.AssemblyFinder.UnitTests.Tests
 {

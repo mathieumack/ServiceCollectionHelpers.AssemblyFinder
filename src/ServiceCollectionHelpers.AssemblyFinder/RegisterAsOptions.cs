@@ -1,4 +1,5 @@
-﻿using System; 
+﻿using Microsoft.Extensions.DependencyInjection;
+using System; 
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -10,7 +11,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         /// <summary>
         /// Indicate the type of register in the service collection
         /// </summary>
-        public RegisterAs RegisterAs { get; set; } = RegisterAs.Transient;
+        public ServiceLifetime ServiceLifetime { get; set; } = ServiceLifetime.Transient;
 
         ///// <summary>
         ///// Limit register to only concrete class, not abstract
