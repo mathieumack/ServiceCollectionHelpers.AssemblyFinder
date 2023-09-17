@@ -20,7 +20,7 @@ jobs:
 
     steps:
     - id: foo
-      uses: MyCIActions@v1
+      uses: actions/MyCIActions@v1
       with:
         githubRef: '${{ github.ref }}'
         githubHeadRef: '${{ github.head_ref }}'
