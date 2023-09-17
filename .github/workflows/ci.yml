@@ -19,16 +19,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - id: foo
-      uses: mathieumack/MyCIActions@v1.2
-      with:
-        githubRef: '${{ github.ref }}'
-        githubHeadRef: '${{ github.head_ref }}'
-        githubRunNumber: '${{ github.run_number }}'
-        nugetPackageIdentifier: '${{ secrets.NUGETPACKAGEIDENTIFIER }}'
-        nugetApiKey: '${{ secrets.NUGETAPIKEY }}'
-        sonarOrganizationCode: '${{ secrets.SONAR_ORGANIZATION_CODE }}'
-        sonarProjectCode: '${{ secrets.SONAR_PROJECT_CODE }}'
-        sonarToken: '${{ secrets.SONAR_TOKEN }}'
-        publishToNuget: ${{ inputs.publishToNuget }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2    
+      - id: foo
+        uses: mathieumack/MyCIActions@v1.3
+        with:
+          githubRef: '${{ github.ref }}'
+          githubHeadRef: '${{ github.head_ref }}'
+          githubRunNumber: '${{ github.run_number }}'
+          nugetPackageIdentifier: '${{ secrets.NUGETPACKAGEIDENTIFIER }}'
+          nugetApiKey: '${{ secrets.NUGETAPIKEY }}'
+          sonarOrganizationCode: '${{ secrets.SONAR_ORGANIZATION_CODE }}'
+          sonarProjectCode: '${{ secrets.SONAR_PROJECT_CODE }}'
+          sonarToken: '${{ secrets.SONAR_TOKEN }}'
+          publishToNuget: ${{ inputs.publishToNuget }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
