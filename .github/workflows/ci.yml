@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2    
     - id: foo
-      uses: mathieumack/MyCIActions@v1.4
+      uses: mathieumack/MyCIActions@v1.5
       with:
         githubRef: '${{ github.ref }}'
         githubHeadRef: '${{ github.head_ref }}'
