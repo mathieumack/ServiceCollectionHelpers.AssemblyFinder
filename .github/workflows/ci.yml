@@ -21,7 +21,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - id: buildAndPackDotNet
-      uses: mathieumack/MyCIActions/dotnetlibworkflow@v1.10
+      uses: mathieumack/MyCIActions/dotnetlibworkflow@v1.11
       with:
         nugetPackageIdentifier: '${{ secrets.NUGETPACKAGEIDENTIFIER }}'
         nugetApiKey: '${{ secrets.NUGETAPIKEY }}'
