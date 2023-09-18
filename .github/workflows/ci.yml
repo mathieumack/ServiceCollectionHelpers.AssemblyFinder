@@ -19,13 +19,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2   
-    - id: foo
-      uses: mathieumack/MyCIActions/nugetversion@v1.7
-      with:
-        nugetPackageIdentifier: '${{ secrets.NUGETPACKAGEIDENTIFIER }}'
-    - id: foo2
-      uses: mathieumack/MyCIActions@v1.7
+    - uses: actions/checkout@v2
+    - id: buildAndPackDotNet
+      uses: mathieumack/MyCIActions/dotnetlibworkflow@v1.8
       with:
         nugetPackageIdentifier: '${{ secrets.NUGETPACKAGEIDENTIFIER }}'
         nugetApiKey: '${{ secrets.NUGETAPIKEY }}'
