@@ -14,7 +14,7 @@ on:
           type: boolean
 
 jobs:
-  call-workflow-passing-data:
+  dotnet:
     uses: mathieumack/MyCIActions/.github/workflows/dotnetlib.yml@main
     with:
       publishToNuget: false
