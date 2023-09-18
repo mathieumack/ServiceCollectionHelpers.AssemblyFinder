@@ -18,7 +18,6 @@ jobs:
     uses: mathieumack/MyCIActions/.github/workflows/dotnetlib.yml@main
     with:
       publishToNuget: false
-      sourceDirectryPath: 'src'
     secrets:
       NUGETPACKAGEIDENTIFIER: ${{ secrets.NUGETPACKAGEIDENTIFIER }}
       SONAR_ORGANIZATION_CODE: ${{ secrets.SONAR_ORGANIZATION_CODE }}
