@@ -19,13 +19,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2    
+    - uses: actions/checkout@v2   
     - id: foo
-      uses: mathieumack/MyCIActions@v1.6
+      uses: mathieumack/MyCIActions/nugetversion@v1.7
       with:
-        githubRef: '${{ github.ref }}'
-        githubHeadRef: '${{ github.head_ref }}'
-        githubRunNumber: '${{ github.run_number }}'
+        nugetPackageIdentifier: '${{ secrets.NUGETPACKAGEIDENTIFIER }}'
+    - id: foo2
+      uses: mathieumack/MyCIActions@v1.7
+      with:
         nugetPackageIdentifier: '${{ secrets.NUGETPACKAGEIDENTIFIER }}'
         nugetApiKey: '${{ secrets.NUGETAPIKEY }}'
         sonarOrganizationCode: '${{ secrets.SONAR_ORGANIZATION_CODE }}'
