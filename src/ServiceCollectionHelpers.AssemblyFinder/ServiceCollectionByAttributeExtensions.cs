@@ -50,7 +50,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                                         if (string.IsNullOrEmpty(variableValue))
                                             continue;
 
-                                        var regex = new System.Text.RegularExpressions.Regex(serviceRegisterAttribute.ConfigurationKeyFormat);
+                                        var regex = new System.Text.RegularExpressions.Regex(serviceRegisterAttribute.ConfigurationKeyFormat, System.Text.RegularExpressions.RegexOptions.IgnoreCase, new TimeSpan(0,0,5));
                                         if (!regex.IsMatch(variableValue))
                                             continue;
                                     }
