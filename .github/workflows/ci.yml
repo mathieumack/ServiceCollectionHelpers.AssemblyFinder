@@ -14,21 +14,13 @@ on:
           type: boolean
 
 jobs:
-  build:
-    name: "CI : Build, Test and publish"
-    runs-on: ubuntu-latest
-
-    steps:
-    - id: foo
-      uses: MyCIActions@v1
-      with:
-        githubRef: '${{ github.ref }}'
-        githubHeadRef: '${{ github.head_ref }}'
-        githubRunNumber: '${{ github.run_number }}'
-        nugetPackageIdentifier: '${{ secrets.NUGETPACKAGEIDENTIFIER }}'
-        nugetApiKey: '${{ secrets.NUGETAPIKEY }}'
-        sonarOrganizationCode: '${{ secrets.SONAR_ORGANIZATION_CODE }}'
-        sonarProjectCode: '${{ secrets.SONAR_PROJECT_CODE }}'
-        sonarToken: '${{ secrets.SONAR_TOKEN }}'
-        publishToNuget: ${{ inputs.publishToNuget }}
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
+  dotnet:
+    uses: mathieumack/MyGithubActions/.github/workflows/dotnetlib.yml@main
+    with:
+      publishToNuget: false
+    secrets:
+      NUGETPACKAGEIDENTIFIER: ${{ secrets.NUGETPACKAGEIDENTIFIER }}
+      SONAR_ORGANIZATION_CODE: ${{ secrets.SONAR_ORGANIZATION_CODE }}
+      SONAR_PROJECT_CODE: ${{ secrets.SONAR_PROJECT_CODE }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      NUGETAPIKEY: ${{ secrets.NUGETAPIKEY }}
