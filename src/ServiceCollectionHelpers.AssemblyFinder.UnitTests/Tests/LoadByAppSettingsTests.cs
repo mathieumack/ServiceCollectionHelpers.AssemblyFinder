@@ -1,46 +1,50 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ServiceCollectionHelpers.AssemblyFinder.UnitTests.Classes.Abstractions;
-using ServiceCollectionHelpers.AssemblyFinder.UnitTests.Classes.Concrete;
 
 namespace ServiceCollectionHelpers.AssemblyFinder.UnitTests.Tests
 {
     [TestClass]
-    public class ServiceCollectionByAttributeUnitTests
+    public class LoadByAppSettingsTests
     {
         [TestMethod]
-        public void RegisterTypesByAttributes()
+        public void Register_ExistsInAppSettings()
         {
             var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings1.json")
                 .Build();
 
             IServiceCollection serviceCollection = new ServiceCollection();
 
             serviceCollection.RegisterTypes(config);
 
-            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var serviceProvder = serviceCollection.BuildServiceProvider();
 
-            var services = serviceProvider.GetServices<IAction>();
-            Assert.AreEqual(2, services.Count());
+            var services = serviceProvder.GetServices<IActionAppSettings>();
 
-            var service = serviceProvider.GetServices<ActionLevel11>();
-            Assert.IsNotNull(service);
+            var allServices = services.ToList();
+
+            Assert.AreEqual(3, allServices.Count);
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void RegisterTypesByAttributesFailed()
+        public void Register_DontExistsInAppSettings()
         {
             var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings2.json")
                 .Build();
 
             IServiceCollection serviceCollection = new ServiceCollection();
 
             serviceCollection.RegisterTypes(config);
 
-            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var serviceProvder = serviceCollection.BuildServiceProvider();
 
-            var service = serviceProvider.GetRequiredService<ActionLevel12>();
+            var services = serviceProvder.GetServices<IActionAppSettings>();
+
+            var allServices = services.ToList();
+
+            Assert.AreEqual(1, allServices.Count);
         }
     }
 }

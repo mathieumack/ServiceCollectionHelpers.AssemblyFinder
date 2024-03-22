@@ -3,6 +3,9 @@ using ServiceCollectionHelpers.AssemblyFinder.Attributes;
 using System;
 using System.Reflection;
 using System.Linq;
+using System.Configuration;
+using System.Xml.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace ServiceCollectionHelpers.AssemblyFinder
 {
@@ -12,8 +15,9 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         /// Register all class or interfaces that have the attribute <see cref="ServiceRegisterAttribute"/> defined
         /// </summary>
         /// <param name="serviceCollection"></param>
+        /// <param name="configuration"></param>
         /// <returns></returns>
-        public static IServiceCollection RegisterTypes(this IServiceCollection serviceCollection)
+        public static IServiceCollection RegisterTypes(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
             var assemblies = ServiceCollectionExtensions.GetAppDomainAssemblies();
 
@@ -30,6 +34,28 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                             if (t.IsClass && !t.IsAbstract && attribute != null)
                             {
                                 var serviceRegisterAttribute = attribute as ServiceRegisterAttribute;
+
+                                // Test configuration key and format (if provided)
+                                if (!string.IsNullOrEmpty(serviceRegisterAttribute.ConfigurationKey))
+                                {
+                                    if (string.IsNullOrEmpty(serviceRegisterAttribute.ConfigurationKeyFormat))
+                                    {
+                                        var variableValue = serviceRegisterAttribute.ConfigurationKey.GetAppSettingsValue(configuration);
+                                        if (string.IsNullOrEmpty(variableValue))
+                                            continue;
+                                    }
+                                    else
+                                    {
+                                        var variableValue = serviceRegisterAttribute.ConfigurationKey.GetAppSettingsValue(configuration);
+                                        if (string.IsNullOrEmpty(variableValue))
+                                            continue;
+
+                                        var regex = new System.Text.RegularExpressions.Regex(serviceRegisterAttribute.ConfigurationKeyFormat);
+                                        if (!regex.IsMatch(variableValue))
+                                            continue;
+                                    }
+                                }
+
                                 var registeroption = new RegisterAsOptions()
                                 {
                                     ServiceLifetime = serviceRegisterAttribute.Scope
@@ -58,6 +84,11 @@ namespace ServiceCollectionHelpers.AssemblyFinder
             }
 
             return serviceCollection;
+        }
+
+        private static string GetAppSettingsValue(this string variableKey, IConfiguration configuration)
+        {
+            return configuration.GetSection(variableKey).Value;
         }
     }
 }

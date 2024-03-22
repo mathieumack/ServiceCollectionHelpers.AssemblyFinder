@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.Services.Common.CommandLine;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
