@@ -120,7 +120,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         internal static void Register(this IServiceCollection serviceCollection, Type type, Type serviceType, RegisterAsOptions options)
         {
             if (options.ServiceLifetime == ServiceLifetime.Transient)
-                serviceCollection.AddScoped(serviceType, type);
+                serviceCollection.AddTransient(serviceType, type);
             else if (options.ServiceLifetime == ServiceLifetime.Scoped)
                 serviceCollection.AddScoped(serviceType, type);
             else if (options.ServiceLifetime == ServiceLifetime.Singleton)
