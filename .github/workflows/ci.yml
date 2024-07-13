@@ -17,7 +17,7 @@ jobs:
   dotnet:
     uses: mathieumack/MyGithubActions/.github/workflows/dotnetlib.yml@feature/v2
     with:
-      publishToNuget: false
+      publishToNuget: ${{ github.event.inputs.publishToNuget }}
     secrets:
       NUGETPACKAGEIDENTIFIER: ${{ secrets.NUGETPACKAGEIDENTIFIER }}
       SONAR_ORGANIZATION_CODE: ${{ secrets.SONAR_ORGANIZATION_CODE }}
