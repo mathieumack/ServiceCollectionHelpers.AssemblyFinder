@@ -16,5 +16,16 @@ namespace ServiceCollectionHelpers.AssemblyFinder.Attributes
         /// Lifetime scope (Transient, Scoped or Singleton)
         /// </summary>
         public ServiceLifetime Scope { get; set; }
+
+        /// <summary>
+        /// Condition to register the service. The provided key must exists in the configuration
+        /// </summary>
+        public string ConfigurationKey { get; set; }
+        
+        /// <summary>
+        /// Regex to match the configuration key (if configuration key is provided and founded)
+        /// If this field is null or empty, it's equivalent to test if the configuration key is not null or empty
+        /// </summary>
+        public string ConfigurationKeyFormat { get; set; }
     }
 }
