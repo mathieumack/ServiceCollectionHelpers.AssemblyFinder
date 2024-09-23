@@ -3,6 +3,7 @@ using ServiceCollectionHelpers.AssemblyFinder.Attributes;
 using System;
 using System.Reflection;
 using System.Linq;
+using Microsoft.Extensions.Configuration;
 
 namespace ServiceCollectionHelpers.AssemblyFinder
 {
@@ -13,7 +14,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         /// </summary>
         /// <param name="serviceCollection"></param>
         /// <returns></returns>
-        public static IServiceCollection RegisterTypes(this IServiceCollection serviceCollection)
+        public static IServiceCollection RegisterTypes(this IServiceCollection serviceCollection, IConfiguration configurations)
         {
             var assemblies = ServiceCollectionRegisterTypesExtensions.GetAppDomainAssemblies();
 

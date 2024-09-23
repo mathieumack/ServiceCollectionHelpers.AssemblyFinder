@@ -3,7 +3,7 @@ using System.Reflection;
 using System;
 using System.Linq;
 using ServiceCollectionHelpers.AssemblyFinder.Abstractions;
-using ServiceCollectionHelpers.AssemblyFinder.Attributes;
+using Microsoft.Extensions.Configuration;
 
 namespace ServiceCollectionHelpers.AssemblyFinder;
 
@@ -14,7 +14,7 @@ public static class ServiceCollectionRegisterServicesExtensions
     /// </summary>
     /// <param name="serviceCollection"></param>
     /// <returns></returns>
-    public static IServiceCollection RegisterServices(this IServiceCollection serviceCollection)
+    public static IServiceCollection RegisterServices(this IServiceCollection serviceCollection, IConfiguration configuration)
     {
         var assemblies = ServiceCollectionRegisterTypesExtensions.GetAppDomainAssemblies();
 
@@ -28,6 +28,27 @@ public static class ServiceCollectionRegisterServicesExtensions
                     if (t.IsClass && !t.IsAbstract && t.GetInterfaces().Any(e => e == typeof(IServiceCollectionRegister)))
                     {
                         var instance = (IServiceCollectionRegister)Activator.CreateInstance(t);
+
+                        if (!string.IsNullOrEmpty(instance.ConfigurationKey))
+                        {
+                            if (string.IsNullOrEmpty(instance.ConfigurationKeyFormat))
+                            {
+                                var variableValue = instance.ConfigurationKey.GetAppSettingsValue(configuration);
+                                if (string.IsNullOrEmpty(variableValue))
+                                    continue;
+                            }
+                            else
+                            {
+                                var variableValue = instance.ConfigurationKey.GetAppSettingsValue(configuration);
+                                if (string.IsNullOrEmpty(variableValue))
+                                    continue;
+
+                                var regex = new System.Text.RegularExpressions.Regex(instance.ConfigurationKeyFormat, System.Text.RegularExpressions.RegexOptions.IgnoreCase, new TimeSpan(0, 0, 5));
+                                if (!regex.IsMatch(variableValue))
+                                    continue;
+                            }
+                        }
+
                         instance.Register(serviceCollection);
                     }
                 }
@@ -42,5 +63,9 @@ public static class ServiceCollectionRegisterServicesExtensions
         }
 
         return serviceCollection;
+    }
+    private static string GetAppSettingsValue(this string variableKey, IConfiguration configuration)
+    {
+        return configuration.GetSection(variableKey).Value;
     }
 }
