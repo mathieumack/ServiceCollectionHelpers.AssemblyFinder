@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace ServiceCollectionHelpers.AssemblyFinder
 {
-    public static class ServiceCollectionExtensions
+    public static class ServiceCollectionRegisterTypesExtensions
     {
         public static IServiceCollection RegisterTypes<T>(this IServiceCollection serviceCollection)
         {
