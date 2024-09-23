@@ -19,7 +19,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         /// <returns></returns>
         public static IServiceCollection RegisterTypes(this IServiceCollection serviceCollection, IConfiguration configuration)
         {
-            var assemblies = ServiceCollectionExtensions.GetAppDomainAssemblies();
+            var assemblies = ServiceCollectionRegisterTypesExtensions.GetAppDomainAssemblies();
 
             try
             {
@@ -50,7 +50,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                                         if (string.IsNullOrEmpty(variableValue))
                                             continue;
 
-                                        var regex = new System.Text.RegularExpressions.Regex(serviceRegisterAttribute.ConfigurationKeyFormat, System.Text.RegularExpressions.RegexOptions.IgnoreCase, new TimeSpan(0,0,5));
+                                        var regex = new System.Text.RegularExpressions.Regex(serviceRegisterAttribute.ConfigurationKeyFormat, System.Text.RegularExpressions.RegexOptions.IgnoreCase, new TimeSpan(0, 0, 5));
                                         if (!regex.IsMatch(variableValue))
                                             continue;
                                     }
@@ -65,7 +65,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
                                     serviceCollection.Register(t, t, registeroption);
                                 else
                                 {
-                                    foreach(var interfaceType in t.GetInterfaces())
+                                    foreach (var interfaceType in t.GetInterfaces())
                                     {
                                         serviceCollection.Register(t, interfaceType, registeroption);
                                     }
