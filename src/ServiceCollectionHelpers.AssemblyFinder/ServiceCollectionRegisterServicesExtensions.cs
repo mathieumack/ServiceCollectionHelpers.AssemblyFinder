@@ -49,7 +49,7 @@ public static class ServiceCollectionRegisterServicesExtensions
                             }
                         }
 
-                        instance.Register(serviceCollection);
+                        instance.Register(serviceCollection, configuration);
                     }
                 }
             }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace ServiceCollectionHelpers.AssemblyFinder.Abstractions;
 
@@ -15,5 +16,11 @@ public interface IServiceCollectionRegister
     /// </summary>
     public string ConfigurationKeyFormat { get; }
 
-    public void Register(IServiceCollection services);
+    /// <summary>
+    /// Call for register of service
+    /// </summary>
+    /// <param name="services"></param>
+    /// <param name="configuration"></param>
+    public void Register(IServiceCollection services, 
+                            IConfiguration configuration);
 }
