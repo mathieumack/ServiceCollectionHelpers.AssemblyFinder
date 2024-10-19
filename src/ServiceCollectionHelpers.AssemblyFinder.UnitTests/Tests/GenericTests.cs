@@ -39,5 +39,10 @@ public class GenericTests
         Assert.AreEqual(1, intServiceScoped.Get());
         Assert.AreEqual("test", stringService.Get());
         Assert.AreEqual("test", stringServiceScoped.Get());
+
+
+        intService.Set(10);
+        Assert.AreEqual(10, intService.Get());
+        Assert.AreEqual(10, intServiceScoped.Get());
     }
 }
