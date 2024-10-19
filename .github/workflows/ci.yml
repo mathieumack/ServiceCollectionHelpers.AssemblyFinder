@@ -18,7 +18,7 @@ jobs:
     uses: mathieumack/MyGithubActions/.github/workflows/dotnetlib.yml@main
     with:
       publishToNuget: ${{ github.event.inputs.publishToNuget == 'true' }}
-      dotnetVersions: |
+      dotnet-version: |
         8.0.x
         9.0.x
     secrets:
