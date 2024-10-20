@@ -15,9 +15,12 @@ on:
 
 jobs:
   dotnet:
-    uses: mathieumack/MyGithubActions/.github/workflows/dotnetlib.yml@feature/v2
+    uses: mathieumack/MyGithubActions/.github/workflows/dotnetlib.yml@main
     with:
       publishToNuget: ${{ github.event.inputs.publishToNuget == 'true' }}
+      dotnet-version: |
+        8.0.x
+        9.0.x
     secrets:
       NUGETPACKAGEIDENTIFIER: ${{ secrets.NUGETPACKAGEIDENTIFIER }}
       NUGETAPIKEY: ${{ secrets.NUGETAPIKEY }}
