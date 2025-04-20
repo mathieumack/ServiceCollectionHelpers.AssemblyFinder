@@ -134,7 +134,7 @@ namespace ServiceCollectionHelpers.AssemblyFinder
         /// <returns>A list of assemblies that should be loaded by the Nop factory.</returns>
         internal static IList<Assembly> GetAppDomainAssemblies()
         {
-            return AppDomain.CurrentDomain.GetAssemblies();
+            return AppDomain.CurrentDomain.GetAssemblies().OrderBy(e => e.FullName).ToList();
         }
 
         #region Utilities
