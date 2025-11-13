@@ -28,7 +28,6 @@ namespace ServiceCollectionHelpers.AssemblyFinder.UnitTests.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void RegisterTypesByAttributesFailed()
         {
             var config = new ConfigurationBuilder()
@@ -40,7 +39,10 @@ namespace ServiceCollectionHelpers.AssemblyFinder.UnitTests.Tests
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
-            var service = serviceProvider.GetRequiredService<ActionLevel12>();
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
+            {
+                var service = serviceProvider.GetRequiredService<ActionLevel12>();
+            });
         }
     }
 }
