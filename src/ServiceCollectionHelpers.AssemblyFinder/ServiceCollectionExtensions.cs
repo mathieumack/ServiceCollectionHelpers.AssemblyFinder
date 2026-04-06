@@ -45,31 +45,19 @@ public static class ServiceCollectionExtensions
 
     private static IServiceCollection RegisterClassesThatInheritsInterface(this IServiceCollection serviceCollection, Type interfaceType, RegisterAsOptions options = null)
     {
-        try
+        foreach (var a in options.Assemblies)
         {
-            foreach (var a in options.Assemblies)
+            foreach (var t in GetLoadableTypes(a))
             {
-                foreach (var t in a.GetTypes())
+                if (!t.IsInterface && t.GetInterfaces().Contains(interfaceType))
                 {
-                    if (!t.IsInterface && t.GetInterfaces().Contains(interfaceType))
+                    if (t.IsClass && !t.IsAbstract)
                     {
-                        if (t.IsClass && !t.IsAbstract)
-                        {
-                            serviceCollection.Register(t, interfaceType, options);
-                        }
+                        serviceCollection.Register(t, interfaceType, options);
                     }
                 }
             }
         }
-        catch (ReflectionTypeLoadException ex)
-        {
-            var msg = string.Join(Environment.NewLine, ex.LoaderExceptions.Select(e => e.Message));
-
-            var fail = new Exception(msg, ex);
-
-            throw fail;
-        }
-
 
         return serviceCollection;
     }
@@ -77,30 +65,19 @@ public static class ServiceCollectionExtensions
     internal static IServiceCollection RegisterClassesThatInheritsFrom(this IServiceCollection serviceCollection, Type inheritsType, RegisterAsOptions options = null)
     {
         var result = new List<Type>();
-        try
+        
+        foreach (var a in options.Assemblies)
         {
-            foreach (var a in options.Assemblies)
+            foreach (var t in GetLoadableTypes(a))
             {
-                foreach (var t in a.GetTypes())
+                if (!t.IsInterface && t.GetNestedTypes().Contains(inheritsType))
                 {
-                    if (!t.IsInterface && t.GetNestedTypes().Contains(inheritsType))
+                    if (t.IsClass && !t.IsAbstract)
                     {
-                        if (t.IsClass && !t.IsAbstract)
-                        {
-                            result.Add(t);
-                        }
+                        result.Add(t);
                     }
                 }
             }
-        }
-        catch (ReflectionTypeLoadException ex)
-        {
-            var msg = string.Join(Environment.NewLine, ex.LoaderExceptions.Select(e => e.Message));
-
-            var fail = new Exception(msg, ex);
-            Debug.WriteLine(fail.Message, fail);
-
-            throw fail;
         }
 
         serviceCollection.Register(result, inheritsType, options);
@@ -138,6 +115,25 @@ public static class ServiceCollectionExtensions
     }
 
     #region Utilities
+
+    /// <summary>
+    /// Safely gets all loadable types from an assembly.
+    /// If a ReflectionTypeLoadException occurs, returns only the types that could be loaded.
+    /// </summary>
+    /// <param name="assembly">The assembly to get types from</param>
+    /// <returns>An array of types that could be successfully loaded</returns>
+    internal static Type[] GetLoadableTypes(Assembly assembly)
+    {
+        try
+        {
+            return assembly.GetTypes();
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            // Return only the types that were successfully loaded
+            return ex.Types.Where(t => t != null).ToArray();
+        }
+    }
 
     /// <summary>
     /// Does type implement generic?
