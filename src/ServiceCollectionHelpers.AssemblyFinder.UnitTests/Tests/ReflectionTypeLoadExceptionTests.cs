@@ -21,8 +21,6 @@ namespace ServiceCollectionHelpers.AssemblyFinder.UnitTests.Tests
             try
             {
                 serviceCollection.RegisterClassesOfType<IDisposable>();
-                // If we get here, the test passed
-                Assert.IsTrue(true);
             }
             catch (ReflectionTypeLoadException)
             {
@@ -44,8 +42,6 @@ namespace ServiceCollectionHelpers.AssemblyFinder.UnitTests.Tests
             try
             {
                 serviceCollection.RegisterTypes(configuration);
-                // If we get here, the test passed
-                Assert.IsTrue(true);
             }
             catch (ReflectionTypeLoadException)
             {
